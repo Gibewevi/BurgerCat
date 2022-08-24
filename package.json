@@ -9,11 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.1.1",
+    "@openzeppelin/contracts": "^4.7.3",
+    "chai": "^4.3.6",
+    "dotenv": "^16.0.1",
+    "ethers": "^5.7.0",
+    "hardhat": "^2.10.2",
+    "keccak256": "^1.0.6",
+    "merkletreejs": "^0.2.32",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^1.0.3",
+    "@nomicfoundation/hardhat-toolbox": "^1.0.2",
     "eslint": "8.22.0",
     "eslint-config-next": "12.2.5"
   }
