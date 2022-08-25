@@ -273,6 +273,7 @@ contract BurgerCatERC721 is Ownable, ERC721A, PaymentSplitter {
      receive() override external payable {
         revert("Seulement des mints du contract");
      }
+
 }
 
 
