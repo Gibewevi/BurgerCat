@@ -3,7 +3,7 @@ const { MerkleTree } = require('merkletreejs');
 const keccak256 = require('keccak256');
 var chai = require('chai');
 const { expect } = require('chai');
-const tokens = require('/tokensjson');
+const tokens = require('../tokens.json');
 
 describe("Tests BurgerCat ERC721A", function(){
   before(async function(){
