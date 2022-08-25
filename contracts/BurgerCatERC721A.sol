@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/finance/PaymentSplitter.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./ERC721A.sol";
 
-contract BurgerCatERC721 is Ownable, ERC721A, PaymentSplitter {
+contract BurgerCatERC721A is Ownable, ERC721A, PaymentSplitter {
 
     using Strings for uint;
     enum Step {

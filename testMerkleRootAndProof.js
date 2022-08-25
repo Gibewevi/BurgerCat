@@ -10,7 +10,7 @@ async function main() {
   const leaves = tab.map((address) => keccak256(address));
   const tree = new MerkleTree(leaves, keccak256, { sort: true });
   const root = tree.getHexRoot();
-  const leaf = keccak256("0x5B38Da6a701c568545dCfcB03FcB875f56beddC4");
+  const leaf = keccak256("0x70997970C51812dc3A010C7d01b50e0d17dc79C8");
   const proof = tree.getHexProof(leaf);
   console.log("root : " + root);
   console.log("proof : " + proof);
