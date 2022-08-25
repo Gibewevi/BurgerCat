@@ -85,4 +85,26 @@ describe("Tests BurgerCat ERC721A", function(){
   it('should get the total supply and the totalSupply shoulb be equal to 1', async function(){
     expect(await this.deployedContract.totalSupply()).to.equal(1);
   })
+
+  it('should be change public sale Step in 2', async function(){
+    await this.deployedContract.setStep(2);
+    expect( await this.deployedContract.sellingStep()).to.equal(2);
+  })
+
+  it('should set the saleStartTime', async function(){
+    let saleStartTime = 1661431947 - 30 * 60 * 60;
+    await this.deployedContract.setSaleStartTime(saleStartTime);
+    expect(await this.deployedContract.saleStartTime()).to.equal(saleStartTime);
+  })
+
+  it('should mint 3  NFTs during in the public sale', async function(){
+    let price = await this.deployedContract.publicSalePrice();
+    let finalPrice = price.mul(3);
+
+    const overrides = {
+    value: finalPrice
+    }
+
+    await this.deployedContract.connect(this.addr1).publicMint(this.addr1.address, 2, overrides);
+  })
 })
