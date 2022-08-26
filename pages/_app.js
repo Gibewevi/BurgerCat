@@ -3,7 +3,14 @@ import { EthersProvider } from './components/context/ethersProviderContext'
 import { ChakraProvider } from "@chakra-ui/react";
 
 function MyApp({ Component, pageProps }) {
-      return <Component {...pageProps} />
-}
-
-export default MyApp
+      return (
+        <EthersProvider>
+          <ChakraProvider>
+            <Component {...pageProps} />
+          </ChakraProvider>
+        </EthersProvider>
+      )
+    }
+    
+    export default MyApp
+    

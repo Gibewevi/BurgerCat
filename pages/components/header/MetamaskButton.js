@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { hasMetamask } from '../../../utils/hasMetamask';
 import { useToast } from "@chakra-ui/react";
 import useEthersProvider from '../../../hooks/useEthersProvider';
@@ -8,6 +9,7 @@ export default function MetamaskButton(){
 
     const [isLoading, setIsLoading] = useState(false);
     const { account, setAccount, provider } = useEthersProvider();
+    const [buttonAccount, setButtonAccount] = useState("Connect")
     const toast = useToast();
 
     const connectWallet = async() => {
@@ -33,6 +35,7 @@ export default function MetamaskButton(){
                         duration: 4000,
                         isClosable: true
                     })
+                    setButtonAccount(resultAccount);
                 }
                 else{
                     setAccount(null)
@@ -46,10 +49,9 @@ export default function MetamaskButton(){
                 }
             }
         }
-        
     }
 
     return(
-        <button onClick={() => connectWallet()} className="bg-white text-red-400 font-black text-xl px-2 py-1 rounded-md">Connect</button>
+        <button onClick={() => connectWallet()} className="bg-white text-red-400 font-black text-xl px-2 py-1 rounded-md">{account ? account : "Connect"}</button>
     )
 }

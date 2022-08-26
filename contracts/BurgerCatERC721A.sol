@@ -29,8 +29,8 @@ contract BurgerCatERC721A is Ownable, ERC721A, PaymentSplitter {
     uint private constant MAX_SUPPLY_MINUS_GIFT = MAX_SUPPLY - MAX_GIFT;
 
     // Prix des NFTs au mint
-    uint public whitelistSalePrice = 0.1 ether;
-    uint public publicSalePrice = 0.15 ether;
+    uint public whitelistSalePrice = 0.001 ether;
+    uint public publicSalePrice = 0.0015 ether;
 
     // Date d'ouvertude de la public sales
     uint public saleStartTime =1661464800;

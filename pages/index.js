@@ -1,24 +1,55 @@
-import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Header from './components/header/Header'
+import React, { useState, useEffect } from 'react'
 import SectionWeb3Band from './components/SectionWeb3Band'
 import SectionMint from './components/SectionMint.js/SectionMint'
 import SectionNFTs from './components/SectionNFTs'
 import { EthersProvider } from './components/context/ethersProviderContext'
-import { ChakraProvider } from "@chakra-ui/react";
+import useEthersProvider from '../hooks/useEthersProvider';
+import { ChakraProvider, useToast } from "@chakra-ui/react";
+import Contract from "../artifacts/contracts/BurgerCatERC721A.sol/BurgerCatERC721A.json";
+import { ethers } from "ethers";
 
 export default function Home() {
+
+  const { account, provider } = useEthersProvider();
+  const [isLoading, setIsLoading] = useState(false);
+
+  //0 : Before, 1 : WhitelistSale, 2 : PublicSale, 3 : SoldOut, 4 : Reveal
+  const [sellingStep, setSellingStep] = useState(null);
+  //SaleStartTime
+  const [SaleStartTime, setSaleStartTime] = useState(null);
+  //WhitelistSale price
+  const [BNWhiteSalePrice, setBNWhiteSalePrice] = useState(null);
+  const[WhitelistSalePrice, setBNWhitelistSalePrice] = useState(null);
+  //PublicSale price
+  const [BNPublicSalePrice, setBNPublicSalePrice] = useState(null);
+  const [PublicSalePrice, setPublicSalePrice] = useState(null);
+  //Total Supply
+  const [totalSupply, setTotalSupply] = useState(null);
+
+  const toast = useToast();
+  const contractAddress = "0x9dB2c6cC3257a7C500Dfdf0d2b23C0f8EDe9C7f9";
+
+  useEffect(()=>{
+    if(account) {
+      getDatas();
+    }
+  })
+  
+  const getDatas = async() => {
+    const Contract = new ethers.Contract(contractAddress, Contract.abi, provider);
+    const sellingStep = await contract.sellingStep();
+    console.log(sellingStep);
+  }
+
+
   return (
     <div className={styles.container}>
-      <EthersProvider>
-        <ChakraProvider>
-          <Header />
-            <SectionWeb3Band />
-            <SectionMint />
-            <SectionNFTs />
-        </ChakraProvider>
-      </EthersProvider>
+        <Header />
+        <SectionWeb3Band />
+        <SectionMint />
+        <SectionNFTs />
     </div>
   )
 }
