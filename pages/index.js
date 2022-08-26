@@ -21,7 +21,7 @@ export default function Home() {
   const [SaleStartTime, setSaleStartTime] = useState(null);
   //WhitelistSale price
   const [BNWhiteSalePrice, setBNWhiteSalePrice] = useState(null);
-  const[WhitelistSalePrice, setBNWhitelistSalePrice] = useState(null);
+  const[WhitelistSalePrice, setWhitelistSalePrice] = useState(null);
   //PublicSale price
   const [BNPublicSalePrice, setBNPublicSalePrice] = useState(null);
   const [PublicSalePrice, setPublicSalePrice] = useState(null);
@@ -36,11 +36,27 @@ export default function Home() {
       getDatas();
     }
   })
-  
+
   const getDatas = async() => {
-    const Contract = new ethers.Contract(contractAddress, Contract.abi, provider);
+    const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
     const sellingStep = await contract.sellingStep();
-    console.log(sellingStep);
+     let WhitelistSalePrice = await contract.whitelistSalePrice();
+     let WhitelistSalePriceBN = ethers.BigNumber.from(WhitelistSalePrice._hex);
+     WhitelistSalePrice = ethers.utils.formatEther(WhitelistSalePriceBN);
+
+     let publicSalePrice = await contract.publicSalePrice();
+     let publicSalePriceBN = ethers.BigNumber.from(publicSalePrice._hex);
+     publicSalePrice = ethers.utils.formatEther(publicSalePriceBN);
+    
+     let totalSupply = await contract.totalSupply();
+     totalSupply = totalSupply.toString();
+
+     setSellingStep(sellingStep);
+     setWhitelistSalePrice(WhitelistSalePrice);
+     setBNWhiteSalePrice(WhitelistSalePriceBN);
+     setPublicSalePrice(publicSalePrice);
+     setBNPublicSalePrice(publicSalePriceBN);
+     setTotalSupply(totalSupply)
   }
 
 
@@ -48,7 +64,7 @@ export default function Home() {
     <div className={styles.container}>
         <Header />
         <SectionWeb3Band />
-        <SectionMint />
+        {account ? <SectionMint /> : <SectionNFTs />}
         <SectionNFTs />
     </div>
   )
