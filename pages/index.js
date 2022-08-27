@@ -57,7 +57,7 @@ export default function Home() {
 
      setSellingStep(sellingStep);
      setWhitelistSalePrice(WhitelistSalePrice);
-     setBNWhiteSalePrice(WhitelistSalePriceBN);
+     setBNWhitelistSalePrice(WhitelistSalePriceBN);
      setPublicSalePrice(publicSalePrice);
      setBNPublicSalePrice(publicSalePriceBN);
      setTotalSupply(totalSupply)

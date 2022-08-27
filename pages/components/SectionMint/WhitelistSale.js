@@ -74,9 +74,6 @@ export default function WhitelistSale(props){
             let date_future = new Date(unixTime);
             let date_now = new Date();
 
-            console.log("future " + date_future);
-            console.log("now " + date_now);
-
             let seconds = Math.floor((date_future - (date_now)) / 1000);
             let minutes = Math.floor(seconds / 60);
             let hours = Math.floor(minutes / 60);
@@ -115,7 +112,7 @@ export default function WhitelistSale(props){
                         <span className="font-black text-5xl text-white tracking-wide">{whitelistOpen ? 'Whitelist sale available' : 'Whitelist sale is not available.'}</span>
                         <span className="font-lighter text-xl tracking-wider">Let's go to mint your Burger Cat.</span>
                     </h3>
-                    {whitelistOpen ? <ButtonMint />  : ''}
+
                 </div>
             </div>
         </section>
