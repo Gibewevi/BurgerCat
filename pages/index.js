@@ -1,8 +1,12 @@
 import styles from '../styles/Home.module.css'
 import Header from './components/header/Header'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import SectionWeb3Band from './components/SectionWeb3Band'
-import SectionMint from './components/SectionMint.js/SectionMint'
+import Before from './components/SectionMint/Before'
+import PublicSale from './components/SectionMint/PublicSale'
+import WhitelistSale from './components/SectionMint/WhitelistSale'
+import SoldOut from './components/SectionMint/SoldOut'
+import Reveal from './components/SectionMint/Reveal'
 import SectionNFTs from './components/SectionNFTs'
 import { EthersProvider } from './components/context/ethersProviderContext'
 import useEthersProvider from '../hooks/useEthersProvider';
@@ -20,7 +24,7 @@ export default function Home() {
   //SaleStartTime
   const [SaleStartTime, setSaleStartTime] = useState(null);
   //WhitelistSale price
-  const [BNWhiteSalePrice, setBNWhiteSalePrice] = useState(null);
+  const [BNWhitelistSalePrice, setBNWhitelistSalePrice] = useState(null);
   const[WhitelistSalePrice, setWhitelistSalePrice] = useState(null);
   //PublicSale price
   const [BNPublicSalePrice, setBNPublicSalePrice] = useState(null);
@@ -64,7 +68,33 @@ export default function Home() {
     <div className={styles.container}>
         <Header />
         <SectionWeb3Band />
-        {account ? <SectionMint /> : <SectionNFTs />}
+        {(() => {
+          switch(sellingStep) {
+            case null:
+                return <Before/>
+            case 0:
+                return <Before/>
+            case 1:
+                return <WhitelistSale 
+                BNWhitelistSalePrice={BNWhitelistSalePrice} 
+                WhitelistSalePrice={WhitelistSalePrice} 
+                totalSupply={totalSupply} 
+                getDatas={getDatas} />
+            case 2:
+                return <PublicSale 
+                BNPublicSalePrice={BNPublicSalePrice}
+                publicSalePrice={publicSalePrice}
+                totalSupply={totalSupply}
+                getDatas={getDatas}
+                />
+            case 3:
+                return <SoldOut totalSupply={totalSupply}/>
+            case 4:
+                return <Reveal />
+            default:
+              return <Before />
+          }
+        })()}
         <SectionNFTs />
     </div>
   )
