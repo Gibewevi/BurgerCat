@@ -33,7 +33,7 @@ contract BurgerCatERC721A is Ownable, ERC721A, PaymentSplitter {
     uint public publicSalePrice = 0.0015 ether;
 
     // Date d'ouvertude de la public sales
-    uint public saleStartTime =1661464800;
+    uint public saleStartTime =1661723618;
     bytes32 public merkleRoot;
 
     // Stocker les metadatas des NFTs
