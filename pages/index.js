@@ -7,6 +7,7 @@ import PublicSale from './components/SectionMint/PublicSale'
 import WhitelistSale from './components/SectionMint/WhitelistSale'
 import SoldOut from './components/SectionMint/SoldOut'
 import Reveal from './components/SectionMint/Reveal'
+import Footer from './components/Footer';
 import SectionNFTs from './components/SectionNFTs'
 import { EthersProvider } from './components/context/ethersProviderContext'
 import useEthersProvider from '../hooks/useEthersProvider';
@@ -32,8 +33,10 @@ export default function Home() {
   //Total Supply
   const [totalSupply, setTotalSupply] = useState(null);
 
+  const maxWhitelist = 2;
+  const maxNFT = 5;
   const toast = useToast();
-  const contractAddress = "0x7AEDC07bB300b9f839eA5197268e9891661bb471";
+  const contractAddress = "0xb8628703EbC82E5679b813aeeC5Be6464F8d9add";
 
   useEffect(()=>{
     if(account) {
@@ -44,28 +47,31 @@ export default function Home() {
   const getDatas = async() => {
     const contract = new ethers.Contract(contractAddress, Contract.abi, provider);
     const sellingStep = await contract.sellingStep();
-     let WhitelistSalePrice = await contract.whitelistSalePrice();
-     let WhitelistSalePriceBN = ethers.BigNumber.from(WhitelistSalePrice._hex);
-     WhitelistSalePrice = ethers.utils.formatEther(WhitelistSalePriceBN);
+     let whitelistSalePrice = await contract.whitelistSalePrice();
+     let whitelistSalePriceBN = ethers.BigNumber.from(whitelistSalePrice._hex);
+     whitelistSalePrice = ethers.utils.formatEther(whitelistSalePriceBN);
 
      let publicSalePrice = await contract.publicSalePrice();
      let publicSalePriceBN = ethers.BigNumber.from(publicSalePrice._hex);
      publicSalePrice = ethers.utils.formatEther(publicSalePriceBN);
     
      let totalSupply = await contract.totalSupply();
+
      totalSupply = totalSupply.toString();
 
      setSellingStep(sellingStep);
-     setWhitelistSalePrice(WhitelistSalePrice);
-     setBNWhitelistSalePrice(WhitelistSalePriceBN);
+     setWhitelistSalePrice(whitelistSalePrice);
+     setBNWhitelistSalePrice(whitelistSalePriceBN);
+
      setPublicSalePrice(publicSalePrice);
      setBNPublicSalePrice(publicSalePriceBN);
+
      setTotalSupply(totalSupply)
   }
 
-
   return (
     <div className={styles.container}>
+      <div class="h-screen w-full">
         <Header />
         <SectionWeb3Band />
         {(() => {
@@ -75,20 +81,12 @@ export default function Home() {
             case 0:
                 return <Before/>
             case 1:
-                return <WhitelistSale 
-                BNWhitelistSalePrice={BNWhitelistSalePrice} 
-                WhitelistSalePrice={WhitelistSalePrice} 
-                totalSupply={totalSupply} 
-                getDatas={getDatas} />
+                return <WhitelistSale BNWhitelistSalePrice={whitelistSalePriceBN} WhitelistSalePrice={whitelistSalePrice} totalSupply={totalSupply} maxWhitelist={maxWhitelist} getDatas={getDatas} />
             case 2:
-                return <PublicSale 
-                BNPublicSalePrice={BNPublicSalePrice}
-                publicSalePrice={publicSalePrice}
-                totalSupply={totalSupply}
-                getDatas={getDatas}
-                />
+                return <PublicSale BNPublicSalePrice={BNPublicSalePrice} PublicSalePrice={PublicSalePrice} totalSupply={totalSupply} getDatas={getDatas} />
+
             case 3:
-                return <SoldOut totalSupply={totalSupply}/>
+                return <SoldOut totalSupply={totalSupply} maxNFT={maxNFT}/>
             case 4:
                 return <Reveal />
             default:
@@ -96,6 +94,8 @@ export default function Home() {
           }
         })()}
         <SectionNFTs />
+        <Footer />
+      </div>
     </div>
   )
 }

@@ -6,30 +6,32 @@ import Contract from "../../../artifacts/contracts/BurgerCatERC721A.sol/BurgerCa
 import tokens from '../../../tokens.json';
 import { MerkleTree } from 'merkletreejs';
 import keccak256 from "keccak256";
-import { useToast } from "@chakra-ui/react";
+import { Button, useToast } from "@chakra-ui/react";
+import ButtonLoading from "./ButtonLoading";
 
 export default function WhitelistSale(props){
 
     const { account, provider } = useEthersProvider();
     const [mintIsLoading, setMintIsLoading] = useState(false);
+    const [countIsLoading, setCountIsLoading] = useState(false);
     const [seconds, setSeconds] = useState(null);
     const [minutes, setMinutes] = useState(null);
     const [hours, setHours] = useState(null);
     const [days, setDays] = useState(null);
     const [timestamp, setTimestamp] = useState(Math.floor(Date.now() / 1000));
 
-    const saleStartTime = 1661723618;
+    const saleStartTime = 1661774640;
     // const endSaleTime = saleStartTime + 12 * 3600;
-    const endSaleTime = saleStartTime + 1*3600;
+    const endSaleTime = saleStartTime + 10;
 
     const toast = useToast();
-    const contractAddress = "0x7AEDC07bB300b9f839eA5197268e9891661bb471";
+    const contractAddress = "0xb8628703EbC82E5679b813aeeC5Be6464F8d9add";
     const [whitelistState, setWhitelistState] = useState(0);
 
     useEffect(() => {
         getCount()
     }, [])
-    
+ 
     const mint = async() => {
         const signer = provider.getSigner();
         const contract = new ethers.Contract(contractAddress, Contract.abi, signer);
@@ -71,6 +73,7 @@ export default function WhitelistSale(props){
     }
 
     const getCount = () => {
+        setCountIsLoading(true);
         var calc = setInterval(function() {
             let unixTime = saleStartTime * 1000;
             let date_future = new Date(unixTime);
@@ -87,15 +90,23 @@ export default function WhitelistSale(props){
             setHours(hours)
             setMinutes(minutes)
             setSeconds(seconds)
+            setCountIsLoading(false)
 
             if(date_now<date_future){
+                // NOT AVAILABLE
                 setWhitelistState(0);
             }
-            if(date_now>date_future && Timestamp<=endSaleTime){
+            else if(date_now>date_future && Timestamp<=endSaleTime && props.totalSupply < props.maxWhitelist){
+                // WHITELIST SALE OPEN
                 setWhitelistState(1);
             }
-           if (date_now>date_future && Timestamp>=endSaleTime){
+            else if(date_now>date_future && Timestamp<=endSaleTime && props.totalSupply == props.maxWhitelist){
+                // SOLD OUT 
                 setWhitelistState(2)
+            }
+            else if (date_now>date_future && Timestamp>=endSaleTime){
+                // WHITELIST CLOSE
+                setWhitelistState(3)
             }
 
         }, 1000);
@@ -112,12 +123,15 @@ export default function WhitelistSale(props){
                 switch(whitelistState) {
                     case 0:
                         return (
-                            <div className="flex flex-col font-black text-6xl text-center text-white mx-10 text-center">
-                            <span>{hours+'H'}</span>
-                            <span>{minutes+'M'}</span>
-                            <span>{seconds+'S'}</span> 
-                            </div>)
-  
+                            <div>{countIsLoading ? (
+                                <span></span>
+                            ) : (
+                                <div className="flex flex-col font-black text-6xl text-center text-white mx-10 text-center">
+                                    <span>{hours+'H'}</span>
+                                    <span>{minutes+'M'}</span>
+                                    <span>{seconds+'S'}</span> 
+                                </div>
+                            )}</div>)
                 }
                 })()}
 
@@ -127,28 +141,48 @@ export default function WhitelistSale(props){
                 switch(whitelistState) {
                     case 0:
                         return (
-                         <div className="w-2/3 flex flex-col items-center">
-                            <h3 className="flex flex-col text-center">                        
-                                <span className="font-black text-5xl text-white tracking-wide">whitelist sale soon available</span>
-                            </h3>
-                        </div>)
+                            <div className="w-2/3 flex flex-col items-center">{countIsLoading ? (
+                                <ButtonLoading />
+                            ) : (
+                                <h3 className="flex flex-col text-center">                        
+                                    <span className="font-black text-5xl text-white tracking-wide">whitelist sale soon available</span>
+                                </h3>
+                            )}</div>)
                     case 1:
                         return (
-                            <div className="w-2/3 flex flex-col items-center">
-                               <h3 className="flex flex-col text-center justify-center items-center">                        
-                                   <span className="font-black text-5xl text-white tracking-wide">whitelist sale is available !</span>
-                                   <span className="font-lighter text-xl tracking-wider">Let's go to mint your Burger Cat.</span>
-                                    <button onClick={mint} className="bg-purple-500 shadow-xl max-w-[150px] text-4xl mt-5 px-3 p-1 font-black text-white">Mint</button>
-                               </h3>
-                           </div>)
+                            <div className="w-2/3 flex flex-col items-center">{countIsLoading ? (
+                                <ButtonLoading />
+                            ) : (
+                                <h3 className="flex flex-col text-center justify-center items-center">                        
+                                    <span className="font-black text-5xl text-white tracking-wide">whitelist sale is available !</span>
+                                    <span className="font-lighter text-xl tracking-wider">Let's go to mint your Burger Cat.</span>
+                                    <button onClick={mint} className="bg-purple-500 shadow-xl max-w-[150px] text-4xl mt-5 px-3 p-1 font-black text-white">{mintIsLoading ?(<ButtonLoading/>):('Mint')}</button>
+                                </h3>
+                            )}</div>)
+
+                            
                     case 2:
                         return (
-                            <div className="w-2/3 flex flex-col items-center">
-                               <h3 className="flex flex-col text-center">                        
-                                   <span className="font-black text-5xl text-white tracking-wide">whitelist sale is close !</span>
-                                   <span className="font-lighter text-xl tracking-wider">Sorry, you came too late... :(</span>
-                               </h3>
-                           </div>)
+                            <div className="w-2/3 flex flex-col items-center">{countIsLoading ? (
+                                <ButtonLoading />
+                            ) : (
+                                <h3 className="flex flex-col text-center items-center">              
+                                        <span className="font-black text-5xl text-white tracking-wide">SOLD OUT</span>
+                                        <span className="font-lighter text-xl tracking-wider">Sorry, you came too late... :(</span>
+                                    </h3>
+                            )}</div>)
+
+
+                    case 3:
+                        return (
+                            <div className="w-2/3 flex flex-col items-center">{countIsLoading ? (
+                                <ButtonLoading />
+                            ) : (
+                                <h3 className="flex flex-col text-center">                        
+                                    <span className="font-black text-5xl text-white tracking-wide">whitelist sale is close !</span>
+                                    <span className="font-lighter text-xl tracking-wider">Sorry, you came too late... :(</span>
+                                </h3>
+                            )}</div>)
                 }
                 })()}
             </div>

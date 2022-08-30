@@ -33,7 +33,7 @@ contract BurgerCatERC721A is Ownable, ERC721A, PaymentSplitter {
     uint public publicSalePrice = 0.0015 ether;
 
     // Date d'ouvertude de la public sales
-    uint public saleStartTime =1661723618;
+    uint public saleStartTime =1661764680;
     bytes32 public merkleRoot;
 
     // Stocker les metadatas des NFTs
@@ -44,8 +44,8 @@ contract BurgerCatERC721A is Ownable, ERC721A, PaymentSplitter {
     mapping(address => uint) public amountNFTperWalletPublicSale;
 
     // Nombre maximun de NFTS par personne
-    uint private constant maxPerAddressDuringWhitelistMint = 1;
-    uint private constant maxPerAddressDuringPublicSale = 2;
+    uint private constant maxPerAddressDuringWhitelistMint = 2;
+    uint private constant maxPerAddressDuringPublicSale = 3;
 
     // Mettre le contract en pause
     bool public isPaused; 

@@ -5,3 +5,7 @@
 .bg-web3-band {
   background-image: linear-gradient(45deg, rgb(233, 22, 95) 0%, rgb(233, 22, 95) 14.286%,rgb(237, 57, 107) 14.286%, rgb(237, 57, 107) 28.572%,rgb(240, 92, 118) 28.572%, rgb(240, 92, 118) 42.858%,rgb(244, 127, 130) 42.858%, rgb(244, 127, 130) 57.144%,rgb(247, 162, 142) 57.144%, rgb(247, 162, 142) 71.43%,rgb(251, 197, 153) 71.43%, rgb(251, 197, 153) 85.716%,rgb(254, 232, 165) 85.716%, rgb(254, 232, 165) 100.002%);
 }
+
+.bg-footer-band {
+  background-image: repeating-linear-gradient(135deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 2px,transparent 2px, transparent 4px),linear-gradient(90deg, rgb(228, 89, 168),rgb(97, 16, 129));
+}
